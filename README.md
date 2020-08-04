@@ -48,3 +48,4 @@ Node.js app:
 curl  http://event-display-csharp-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com  -w  "%{time_starttransfer}\n"
 
 
+oc new-build quay.io/rhdevelopers/quarkus-java-builder~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/quarkus  --to="quarkus" --name="quarkus"
