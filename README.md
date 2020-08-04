@@ -50,6 +50,9 @@ curl  http://event-display-csharp-knative-test.apps.cluster-mta-755a.mta-755a.ex
 # Quarkus
 
 
-oc new-build quay.io/quarkus/ubi-quarkus-native-s2i:20.1.0-java11~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/quarkus--name=quarkus-quickstart-native
+oc new-build quay.io/quarkus/ubi-quarkus-native-s2i:20.1.0-java11~https://github.com/deewhyweb/polyglot-knative.git --context-dir=samples/quarkus --to=quarkus-quickstart-native --name=quarkus-quickstart-native
+
+oc new-build quay.io/quarkus/ubi-quarkus-native-s2i:20.1.0-java11~https://github.com/quarkusio/quarkus-quickstarts.git --context-dir=getting-started-knative --to="quarkus-quickstart-native" --name=quarkus-quickstart-native
+
 
  curl http://event-display-quarkus-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com -w  "%{time_starttransfer}\n"
