@@ -20,6 +20,6 @@ spec:
   template:
     spec:
       containers:
-      - image: quay.io/hayesphilip/knative-polyglot-csharp:v1.0
+      - image: image-registry.openshift-image-registry.svc:5000/knative-test/csharp:latest
       
 

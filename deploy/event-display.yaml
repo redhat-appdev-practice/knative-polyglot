@@ -20,6 +20,6 @@ spec:
   template:
     spec:
       containers:
-      - image: quay.io/hayesphilip/knative-polyglot-nodejs:v1.0
+      - image: image-registry.openshift-image-registry.svc:5000/knative-test/polyglot-knative:latest
       
 

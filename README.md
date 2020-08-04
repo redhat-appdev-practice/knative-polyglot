@@ -30,13 +30,7 @@ Create knative-test project
 
 oc new-project knative-test
 
-export QUAY_USERNAME=
-
-podman login quay.io
-
-podman build -t quay.io/$QUAY_USERNAME/knative-polyglot-nodejs:v1.0 ./samples/node
-
-podman push quay.io/$QUAY_USERNAME/knative-polyglot-nodejs:v1.0
+oc new-build nodejs:12~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/node
 
 oc apply -f ./deploy/event-display.yaml
 
@@ -47,11 +41,10 @@ Node.js app:
 
 
 # C#
-https://knative.dev/docs/serving/samples/hello-world/helloworld-csharp/
+ oc new-build dotnet:3.1~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/csharp  --to="csharp" --name="csharp"
 
-podman build -t quay.io/$QUAY_USERNAME/knative-polyglot-csharp:v1.0 ./samples/csharp
-
-podman push quay.io/$QUAY_USERNAME/knative-polyglot-csharp:v1.0
-
+ oc apply -f ./deploy/event-display-csharp.yaml
 
 curl  http://event-display-csharp-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com  -w  "%{time_starttransfer}\n"
+
+
