@@ -6,4 +6,4 @@ metadata:
 spec:
   source: redhat-operators
   targetNamespace: openshift-operators 
-  packages: serverless-operator
+  packages: serverless-operator,red-hat-camel-k
