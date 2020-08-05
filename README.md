@@ -63,7 +63,7 @@ curl http://event-display-quarkus-knative-test.apps.cluster-mta-755a.mta-755a.ex
  curl http://event-display-vertx-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com -w  "%{time_starttransfer}\n"
 
  # Spring Boot
- oc new-build maven:3.5-jdk-8-alpine~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/spring  --to="spring" --name="spring"
+ oc new-build openjdk-8-rhel8:1.1~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/spring  --to="spring" --name="spring"
 
  oc apply -f ./deploy/event-display-spring.yaml
 
