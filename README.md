@@ -30,14 +30,12 @@ Create knative-test project
 
 oc new-project knative-test
 
+# Node.js
 oc new-build nodejs:12~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/node
 
 oc apply -f ./deploy/event-display.yaml
 
 curl http://event-display-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com  -w  "%{time_starttransfer}\n"
-
-Node.js app:
-3.058152
 
 
 # C#
@@ -49,10 +47,15 @@ curl  http://event-display-csharp-knative-test.apps.cluster-mta-755a.mta-755a.ex
 
 # Quarkus
 
+oc apply -f ./deploy/is-quarkus-quickstart-native.yaml
 
-oc new-build quay.io/quarkus/ubi-quarkus-native-s2i:20.1.0-java11~https://github.com/deewhyweb/polyglot-knative.git --context-dir=samples/quarkus --to=quarkus-quickstart-native --name=quarkus-quickstart-native
+oc apply -f ./deploy/quarkus-build-config.yaml
 
-oc new-build quay.io/quarkus/ubi-quarkus-native-s2i:20.1.0-java11~https://github.com/quarkusio/quarkus-quickstarts.git --context-dir=getting-started-knative --to="quarkus-quickstart-native" --name=quarkus-quickstart-native
+oc apply -f ./deploy/event-display-quarkus.yaml
 
+curl http://event-display-quarkus-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com -w  "%{time_starttransfer}\n"
 
- curl http://event-display-quarkus-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com -w  "%{time_starttransfer}\n"
+# vert.x
+ oc new-build hub.docker.com/r/fabric8/s2i-java~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/vertx  --to="vertx" --name="vertx"
+
+ oc apply -f ./deploy/event-display-vertx.yaml
