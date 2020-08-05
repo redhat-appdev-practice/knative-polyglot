@@ -56,6 +56,15 @@ oc apply -f ./deploy/event-display-quarkus.yaml
 curl http://event-display-quarkus-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com -w  "%{time_starttransfer}\n"
 
 # vert.x
- oc new-build hub.docker.com/r/fabric8/s2i-java~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/vertx  --to="vertx" --name="vertx"
+ oc new-build fabric8/s2i-java~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/vertx  --to="vertx" --name="vertx"
 
  oc apply -f ./deploy/event-display-vertx.yaml
+
+ curl http://event-display-vertx-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com -w  "%{time_starttransfer}\n"
+
+ # Spring Boot
+ oc new-build maven:3.5-jdk-8-alpine~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/spring  --to="spring" --name="spring"
+
+ oc apply -f ./deploy/event-display-spring.yaml
+
+ curl http://event-display-spring-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com -w  "%{time_starttransfer}\n"
