@@ -3,4 +3,4 @@ kind: ImageStream
 metadata:
   labels:
     build: vertx-quickstart-native
-  name: vertx-quickstart-native
+  name: vertx

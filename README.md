@@ -82,9 +82,13 @@ Test the Knative service
 
 # vert.x
 
-Build vert.x app image
+Create vert.x image stream
 
-`oc new-build fabric8/s2i-java~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/vertx  --to="vertx" --name="vertx"`
+`oc apply -f ./deploy/is-vertx.yaml`
+
+Build vert.x image
+
+`oc apply -f ./deploy/vertx-build-config.yaml`
 
 Deploy the Knative service
 

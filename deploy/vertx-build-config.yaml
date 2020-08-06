@@ -9,7 +9,7 @@ spec:
   output:
     to:
       kind: ImageStreamTag
-      name: vertx-quickstart-native:latest
+      name: vertx:latest
   postCommit: {}
   resources:
     limits:
@@ -18,7 +18,7 @@ spec:
   source:
     contextDir: samples/vertx
     git:
-      uri: https://github.com/deewhyweb/polyglot-knative.git#vertx-native-image
+      uri: https://github.com/deewhyweb/polyglot-knative.git
     type: Git
   strategy:
     sourceStrategy:
