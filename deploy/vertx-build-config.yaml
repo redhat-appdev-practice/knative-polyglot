@@ -18,7 +18,7 @@ spec:
   source:
     contextDir: samples/vertx
     git:
-      uri: https://github.com/deewhyweb/polyglot-knative.git
+      uri: https://github.com/deewhyweb/polyglot-knative.git#vertx-native-image
     type: Git
   strategy:
     sourceStrategy:
