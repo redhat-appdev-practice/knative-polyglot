@@ -41,11 +41,11 @@ Build node.js app image
 
 Deploy the Knative service
 
-`oc apply -f ./deploy/event-display.yaml`
+`oc apply -f ./deploy/event-display-nodejs.yaml`
 
 Test the Knative service
 
-`curl http://event-display-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com  -w  "%{time_starttransfer}\n"`
+`curl http://event-display-nodejs-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com  -w  "%{time_starttransfer}\n"`
 
 
 # C#
