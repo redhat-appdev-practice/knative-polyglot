@@ -1,4 +1,17 @@
-# Environment setup
+# Overview
+
+The purpose of this repository is to give simple examples of Knative serving applications in a range of common languages and frameworks, primarily supported as "Red Hat Cloud Native Runtimes".  The languages / frameworks covered are:
+
+* Node.js
+* C#
+* Quarkus
+* Vert.x
+* Spring Boot
+* Camel-k
+
+The intention is to use OpenShift S2I tools where possible to perform builds, reducing the need to install specific local tooling e.g. podman, maven.
+
+# OpenShift Environment setup
 
 Install Serverless and Camel-k Operators
 
@@ -8,6 +21,10 @@ Deploy operator subscriptions
 
 `oc apply -f ./deploy/operator-subscriptions.yaml`
 
+Once these operators are installed they should appear under the "Installed Operators" tab as below
+
+![](./assets/operators.png)
+
 Create knative-serving project
 
 `oc new-project knative-serving`
@@ -15,6 +32,8 @@ Create knative-serving project
 Install knative-serving
 
 `oc apply -f ./deploy/knative-serving.yaml`
+
+It can take some time for Knative serving to be fully installed, you could see some pod restarts, eventually you should see:
 
 ```
 oc get pods
@@ -39,13 +58,25 @@ Build node.js app image
 
 `oc new-build nodejs:12~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/node`
 
+Watch the build logs:
+
+`oc logs -f  -n knative-test  $(oc get pods -o name -n knative-test | grep build)`
+
+Once the image is pushed successfully, and the build is complete we can delete the build pod:
+
+`oc delete pod --field-selector=status.phase==Succeeded -n knative-test`
+
 Deploy the Knative service
 
 `oc apply -f ./deploy/event-display-nodejs.yaml`
 
+Monitor the logs of the node.js Knative service:
+
+`oc logs -f -c user-container -n knative-test  $(oc get pods -o name -n knative-test | grep event-display)` 
+
 Test the Knative service
 
-`curl http://event-display-nodejs-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com  -w  "%{time_starttransfer}\n"`
+`curl $(oc get ksvc event-display-nodejs -o custom-columns=url:status.url --no-headers)  -w  "%{time_starttransfer}\n"`
 
 
 # C#
@@ -54,15 +85,25 @@ Build .NET app image
 
 `oc new-build dotnet:3.1~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/csharp  --to="csharp" --name="csharp"`
 
+Watch the build logs:
+
+`oc logs -f  -n knative-test  $(oc get pods -o name -n knative-test | grep build)`
+
+Once the image is pushed successfully, and the build is complete we can delete the build pod:
+
+`oc delete pod --field-selector=status.phase==Succeeded -n knative-test`
+
 Deploy the Knative service
 
 `oc apply -f ./deploy/event-display-csharp.yaml`
 
 Test the Knative service
 
-`curl  http://event-display-csharp-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com  -w  "%{time_starttransfer}\n"`
+`curl  $(oc get ksvc event-display-csharp -o custom-columns=url:status.url --no-headers)  -w  "%{time_starttransfer}\n"`
 
 # Quarkus
+
+For the Quarkus build we need to create a modified build config (and an image stream) to allow more resources to the build.  
 
 Create image stream
 
@@ -72,13 +113,21 @@ Create the quarkus build config
 
 `oc apply -f ./deploy/quarkus-build-config.yaml`
 
+Watch the build logs:
+
+`oc logs -f  -n knative-test  $(oc get pods -o name -n knative-test | grep build)`
+
+Once the image is pushed successfully, and the build is complete we can delete the build pod:
+
+`oc delete pod --field-selector=status.phase==Succeeded -n knative-test`
+
 Deploy the Knative service
 
 `oc apply -f ./deploy/event-display-quarkus.yaml`
 
 Test the Knative service
 
-`curl http://event-display-quarkus-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com -w  "%{time_starttransfer}\n"`
+`curl $(oc get ksvc event-display-quarkus -o custom-columns=url:status.url --no-headers)  -w  "%{time_starttransfer}\n"`
 
 # vert.x
 
@@ -90,13 +139,21 @@ Build vert.x image
 
 `oc apply -f ./deploy/vertx-build-config.yaml`
 
+Watch the build logs:
+
+`oc logs -f  -n knative-test  $(oc get pods -o name -n knative-test | grep build)`
+
+Once the image is pushed successfully, and the build is complete we can delete the build pod:
+
+`oc delete pod --field-selector=status.phase==Succeeded -n knative-test`
+
 Deploy the Knative service
 
 `oc apply -f ./deploy/event-display-vertx.yaml`
 
 Test the Knative service
 
-`curl http://event-display-vertx-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com -w  "%{time_starttransfer}\n"`
+`curl $(oc get ksvc event-display-vertx -o custom-columns=url:status.url --no-headers) -w  "%{time_starttransfer}\n"`
 
  # Spring Boot
 
@@ -104,19 +161,24 @@ Test the Knative service
 
  `oc new-build openjdk-8-rhel8:1.1~https://github.com/deewhyweb/polyglot-knative.git --context-dir=/samples/spring  --to="spring" --name="spring"`
 
+ Watch the build logs:
+
+`oc logs -f  -n knative-test  $(oc get pods -o name -n knative-test | grep build)`
+
+Once the image is pushed successfully, and the build is complete we can delete the build pod:
+
+`oc delete pod --field-selector=status.phase==Succeeded -n knative-test`
+
 Deploy the Knative service
 
 `oc apply -f ./deploy/event-display-spring.yaml`
 
 Test the Knative service
 
-`curl http://event-display-spring-knative-test.apps.cluster-mta-755a.mta-755a.example.opentlc.com -w  "%{time_starttransfer}\n"`
+`curl $(oc get ksvc event-display-spring -o custom-columns=url:status.url --no-headers) -w  "%{time_starttransfer}\n"`
 
 # Camel-k
 
-Create a camelknative namespace
-
-`oc new-project camelknative`
 
 Install the Kamel CLI from https://github.com/apache/camel-k/releases
 
@@ -124,19 +186,29 @@ Deploy and configure the Camel-k integration
 
 `kamel run ./samples/Camel-k/Sample.java --name sample --dependency camel-undertow --env CAMEL_SETBODY="Response received from POD : {{env:HOSTNAME}}"`
 
-Wait for the integration to be ready:
+The camel CLI will create the image build, and create the Knative service from the image.  Run the following commands to watch the progress.
+
+
 
 ```
- oc get it
+oc get it
 NAME      PHASE          KIT                        REPLICAS
 sample    Building Kit   kit-bslepn11l893qqtt713g 
 
-...
+```
 
+Wait for the integration to be ready:
+
+```
+oc get it
 NAME      PHASE     KIT                        REPLICAS
 sample    Running   kit-bslepn11l893qqtt713g   0
 
+```
 
+Once the integration is ready watch the deployment which will create the Knative service.
+
+```
 oc get pods
 NAME                                       READY     STATUS              RESTARTS   AGE
 camel-k-kit-bslepn11l893qqtt713g-1-build   0/1       Completed           0          63s
@@ -149,10 +221,10 @@ sample-wnnsf-deployment   0/1       1            0           9s
 
 oc get ksvc      
 NAME      URL                                                                             LATESTCREATED   LATESTREADY    READY     REASON
-sample    http://sample-camelknative.apps.cluster-mta-755a.mta-755a.example.opentlc.com   sample-wnnsf    sample-wnnsf   Unknown   
+sample    http://sample-camelknative.apps.xxx.yourcluster.com   sample-wnnsf    sample-wnnsf   Unknown   
 
 ```
 
-Test the Knative service
+Once the Knative service is created, test the Knative service
 
-`curl http://sample-camelknative.apps.cluster-mta-755a.mta-755a.example.opentlc.com/test  -w  "%{time_starttransfer}\n"`
+`curl $(oc get ksvc sample -o custom-columns=url:status.url --no-headers)/test -w  "\n%{time_starttransfer}\n"`
