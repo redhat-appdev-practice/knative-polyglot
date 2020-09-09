@@ -184,7 +184,7 @@ Install the Kamel CLI from https://github.com/apache/camel-k/releases
 
 Deploy and configure the Camel-k integration
 
-`kamel run ./samples/Camel-k/Sample.java --name sample --dependency camel-undertow --env CAMEL_SETBODY="Response received from POD : {{env:HOSTNAME}}"`
+`kamel run ./samples/Camel-k/Sample.java --name event-display-camel --dependency camel-undertow --env CAMEL_SETBODY="Response received from POD : {{env:HOSTNAME}}"`
 
 The camel CLI will create the image build, and create the Knative service from the image.  Run the following commands to watch the progress.
 
@@ -193,7 +193,7 @@ The camel CLI will create the image build, and create the Knative service from t
 ```
 oc get it
 NAME      PHASE          KIT                        REPLICAS
-sample    Building Kit   kit-bslepn11l893qqtt713g 
+event-display-camel    Building Kit   kit-bslepn11l893qqtt713g 
 
 ```
 
@@ -202,7 +202,7 @@ Wait for the integration to be ready:
 ```
 oc get it
 NAME      PHASE     KIT                        REPLICAS
-sample    Running   kit-bslepn11l893qqtt713g   0
+event-display-camel    Running   kit-bslepn11l893qqtt713g   0
 
 ```
 
@@ -213,18 +213,18 @@ oc get pods
 NAME                                       READY     STATUS              RESTARTS   AGE
 camel-k-kit-bslepn11l893qqtt713g-1-build   0/1       Completed           0          63s
 camel-k-kit-bslepn11l893qqtt713g-builder   0/1       Completed           0          2m19s
-sample-wnnsf-deployment-84744bfbdd-xpdw5   0/2       ContainerCreating   0          6s
+event-display-camel-wnnsf-deployment-84744bfbdd-xpdw5   0/2       ContainerCreating   0          6s
 
 oc get deployment
 NAME                      READY     UP-TO-DATE   AVAILABLE   AGE
-sample-wnnsf-deployment   0/1       1            0           9s
+event-display-camel-wnnsf-deployment   0/1       1            0           9s
 
 oc get ksvc      
 NAME      URL                                                                             LATESTCREATED   LATESTREADY    READY     REASON
-sample    http://sample-camelknative.apps.xxx.yourcluster.com   sample-wnnsf    sample-wnnsf   Unknown   
+event-display-camel    http://event-display-camel-camelknative.apps.xxx.yourcluster.com   event-display-camel-wnnsf    event-display-camel-wnnsf   Unknown   
 
 ```
 
 Once the Knative service is created, test the Knative service
 
-`curl $(oc get ksvc sample -o custom-columns=url:status.url --no-headers)/test -w  "\n%{time_starttransfer}\n"`
+`curl $(oc get ksvc event-display-camel -o custom-columns=url:status.url --no-headers)/test -w  "\n%{time_starttransfer}\n"`
