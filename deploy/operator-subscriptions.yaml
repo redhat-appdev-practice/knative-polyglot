@@ -7,8 +7,8 @@ metadata:
 spec:
   channel: "4.3"
   name: serverless-operator 
-  source: operators 
-  sourceNamespace: openshift-operators
+  source: redhat-operators 
+  sourceNamespace: openshift-marketplace
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
@@ -18,5 +18,5 @@ metadata:
 spec:
   channel: "techpreview"
   name: red-hat-camel-k 
-  source: operators 
-  sourceNamespace: openshift-operators
+  source: redhat-operators 
+  sourceNamespace: openshift-marketplace

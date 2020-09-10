@@ -15,8 +15,6 @@ The intention is to use OpenShift S2I tools where possible to perform builds, re
 
 Install Serverless and Camel-k Operators
 
-`oc apply -f ./deploy/operators.yaml`
-
 Deploy operator subscriptions
 
 `oc apply -f ./deploy/operator-subscriptions.yaml`
